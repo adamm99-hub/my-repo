@@ -10,6 +10,8 @@ SHIRT_SIZES = (
         ('L', 'Large'),
     )
 
+PLEC = models.IntegerChoices('Płeć', 'kobieta mężczyzna inne')
+
 
 class Team(models.Model):
     name = models.CharField(max_length=60)
@@ -32,3 +34,20 @@ class Person(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Stanowisko(models.Model):
+    nazwa = models.CharField(max_length = 50)
+    opis = models.TextField(null = True, blank = True)
+
+    class Meta:
+        verbose_name_plural = "Stanowiska"
+
+class Osoba(models.Model):
+# skrót Shift + Alt + strzałka
+    imie = models.CharField(max_length = 60, blank = False)
+    nazwisko = models.CharField(max_length = 60, blank = False)
+    plec = models.IntegerField(choices = PLEC.choices, default = PLEC.choices[0][0])
+    stanowisko = models.ForeignKey(Stanowisko, null=True, blank=True, on_delete=models.SET_NULL)
+    data_dodania = models.DateField(auto_now_add = True)
+    class Meta:
+        verbose_name_plural = "Osoby"
