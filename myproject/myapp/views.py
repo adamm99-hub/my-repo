@@ -3,6 +3,8 @@ from django.http import HttpResponse
 import datetime
 from .models import Person
 from django.shortcuts import render
+from django.http import Http404
+
 
 
 def welcome_view(request):
@@ -20,3 +22,14 @@ def person_list(request):
     return render(request,
                   "myapp/person/list.html",
                   {'persons': persons})
+
+def person_detail(request, id):
+    # pobieramy konkretny obiekt Person
+    try:
+        person = Person.objects.get(id=id)
+    except Person.DoesNotExist:
+        raise Http404("Obiekt Person o podanym id nie istnieje")
+
+    return render(request,
+                  "myapp/person/detail.html",
+                  {'person': person})
